@@ -1,40 +1,20 @@
 module SevenWonders {
 
 	export interface ScoreboardContainerProps {
-		players: Array<string>;
+		players: Array<Player>;
 		children?: any;
-	}
-	
-	export interface ScoreboardContainerState {
 		categories: Array<Category>;
 	}
-	
-	export interface Category {
-		name: string;
-		categoryClass: string;
-	}
 
-	export class ScoreboardContainer extends React.Component<ScoreboardContainerProps, ScoreboardContainerState> {
+	export class ScoreboardContainer extends React.Component<ScoreboardContainerProps, ScoreboardContainerProps> {
 
 		constructor(props: ScoreboardContainerProps) {
 			super(props);
-			
-			this.state = {
-				categories: [
-					{ name: 'Money', categoryClass: 'money' },
-					{ name: 'Commerce', categoryClass: 'commerce' },
-					{ name: 'Military', categoryClass: 'military' },
-					{ name: 'Science', categoryClass: 'science' },
-					{ name: 'Guilds', categoryClass: 'guilds' },
-					{ name: 'Victory Points', categoryClass: 'victory-points' },
-					{ name: 'Wonders', categoryClass: 'wonders' },
-				]
-			}
 		}		
 
 		render() {
-			let createPlayerHeader = (playerName: string, index: number) => {
-				return <th key={playerName}>{playerName}</th>
+			let createPlayerHeader = (player: Player, index: number) => {
+				return <th key={player.name}>{player.name}</th>
 			};
 			
 			let createScoreRow = (category: Category, index: number) => {
@@ -50,7 +30,8 @@ module SevenWonders {
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.categories.map(createScoreRow)}
+						{this.props.categories.map(createScoreRow)}
+						<ScoreboardTotalRow players={this.props.players} />
 					</tbody>
 				</table>
 			);

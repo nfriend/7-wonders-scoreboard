@@ -31,6 +31,10 @@
 	background-color: #E8E8E8;
 }
 
+.category-row.total {
+	font-weight: bold;
+}
+
 .score-table {
 	table-layout: fixed;
 }

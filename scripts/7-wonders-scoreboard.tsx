@@ -5,6 +5,7 @@
 /// <reference path="./components/SevenWondersHeader" />
 /// <reference path="./components/ScoreboardContainer" />
 /// <reference path="./components/ScoreboardRow" />
+/// <reference path="./components/ScoreboardTotalRow" />
 /// <reference path="./components/ScoreboardCell" />
 
 module SevenWonders {

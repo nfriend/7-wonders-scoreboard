@@ -5,7 +5,9 @@ module SevenWonders {
 	export interface ScoreboardCellProps {
 		children?: any;
 		isEditable: boolean;
-		value: string | number;
+		player?: Player;
+		category?: Category;
+		value?: string;
 	}
 
 	export interface ScoreboardCellState {
@@ -32,6 +34,12 @@ module SevenWonders {
 			this.setState({
 				isEditing: false
 			});
+
+			let cellValue = parseInt($(this.refs['cellInput']).val(), 10);
+			if (!isNaN(cellValue)) {
+				this.props.player.scores[this.props.category.category] = cellValue;
+				this.props.player.onUpdate();
+			}
 		}
 
 		onKeyDown = (ev: React.KeyboardEvent) => {
@@ -61,11 +69,11 @@ module SevenWonders {
 					return (
 						<td>
 							<input ref="cellInput" onBlur={this.onBlur} onKeyDown={this.onKeyDown} />
-							</td>
+						</td>
 					);
 				} else {
 					return (
-						<td tabIndex={0} onFocus={this.onFocus}>{this.props.value}</td>
+						<td tabIndex={0} onFocus={this.onFocus}>{this.props.player.scores[this.props.category.category]}</td>
 					);
 				}
 			} else {

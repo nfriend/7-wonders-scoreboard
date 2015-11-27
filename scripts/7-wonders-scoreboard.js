@@ -5,14 +5,49 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var SevenWonders;
 (function (SevenWonders) {
+    var Score = (function () {
+        function Score() {
+            var _this = this;
+            this.money = 0;
+            this.commerce = 0;
+            this.military = 0;
+            this.science = 0;
+            this.guilds = 0;
+            this.victoryPoints = 0;
+            this.wonders = 0;
+            this.total = function () {
+                return _this.money + _this.commerce + _this.military + _this.science + _this.guilds + _this.victoryPoints + _this.wonders;
+            };
+        }
+        return Score;
+    })();
+    SevenWonders.Score = Score;
     var SevenWondersContainer = (function (_super) {
         __extends(SevenWondersContainer, _super);
         function SevenWondersContainer(props) {
             _super.call(this, props);
-            this.players = ['Nathan', 'Derek', 'Emily', 'Jill', 'Terry'];
+            var state = {
+                categories: [
+                    { displayName: 'Money', categoryClass: 'money', category: 'money' },
+                    { displayName: 'Commerce', categoryClass: 'commerce', category: 'commerce' },
+                    { displayName: 'Military', categoryClass: 'military', category: 'military' },
+                    { displayName: 'Science', categoryClass: 'science', category: 'science' },
+                    { displayName: 'Guilds', categoryClass: 'guilds', category: 'guilds' },
+                    { displayName: 'Victory Points', categoryClass: 'victory-points', category: 'victoryPoints' },
+                    { displayName: 'Wonders', categoryClass: 'wonders', category: 'wonders' }
+                ],
+                players: []
+            };
+            ['Nathan', 'Emily', 'Derek', 'Jill', 'Terry'].forEach(function (name) {
+                state.players.push({
+                    name: name,
+                    scores: new Score()
+                });
+            });
+            this.state = state;
         }
         SevenWondersContainer.prototype.render = function () {
-            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.players})));
+            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories})));
         };
         return SevenWondersContainer;
     })(React.Component);
@@ -24,9 +59,6 @@ var SevenWonders;
         __extends(SevenWondersHeader, _super);
         function SevenWondersHeader(props) {
             _super.call(this, props);
-            this.state = {
-                currentUrl: null
-            };
         }
         SevenWondersHeader.prototype.render = function () {
             return (React.createElement("div", null, React.createElement("div", {"className": "title-container"}, React.createElement("h1", null, "Seven Wonders Scoreboard")), React.createElement("div", {"className": "cleared"})));
@@ -41,27 +73,16 @@ var SevenWonders;
         __extends(ScoreboardContainer, _super);
         function ScoreboardContainer(props) {
             _super.call(this, props);
-            this.state = {
-                categories: [
-                    { name: 'Money', categoryClass: 'money' },
-                    { name: 'Commerce', categoryClass: 'commerce' },
-                    { name: 'Military', categoryClass: 'military' },
-                    { name: 'Science', categoryClass: 'science' },
-                    { name: 'Guilds', categoryClass: 'guilds' },
-                    { name: 'Victory Points', categoryClass: 'victory-points' },
-                    { name: 'Wonders', categoryClass: 'wonders' },
-                ]
-            };
         }
         ScoreboardContainer.prototype.render = function () {
             var _this = this;
-            var createPlayerHeader = function (playerName, index) {
-                return React.createElement("th", {"key": playerName}, playerName);
+            var createPlayerHeader = function (player, index) {
+                return React.createElement("th", {"key": player.name}, player.name);
             };
             var createScoreRow = function (category, index) {
                 return React.createElement(SevenWonders.ScoreboardRow, {"players": _this.props.players, "category": category});
             };
-            return (React.createElement("table", {"className": "table score-table"}, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Category"), this.props.players.map(createPlayerHeader))), React.createElement("tbody", null, this.state.categories.map(createScoreRow))));
+            return (React.createElement("table", {"className": "table score-table"}, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Category"), this.props.players.map(createPlayerHeader))), React.createElement("tbody", null, this.props.categories.map(createScoreRow), React.createElement(SevenWonders.ScoreboardTotalRow, {"players": this.props.players}))));
         };
         return ScoreboardContainer;
     })(React.Component);
@@ -75,14 +96,37 @@ var SevenWonders;
             _super.call(this, props);
         }
         ScoreboardRow.prototype.render = function () {
-            var createCell = function (playerName, index) {
-                return React.createElement(SevenWonders.ScoreboardCell, {"isEditable": true, "value": 73});
+            var _this = this;
+            var createCell = function (player, index) {
+                return React.createElement(SevenWonders.ScoreboardCell, {"isEditable": true, "player": player, "category": _this.props.category});
             };
-            return (React.createElement("tr", {"className": this.props.category.categoryClass + ' category-row'}, React.createElement(SevenWonders.ScoreboardCell, {"isEditable": false, "value": this.props.category.name}), this.props.players.map(createCell)));
+            return (React.createElement("tr", {"className": this.props.category.categoryClass + ' category-row'}, React.createElement(SevenWonders.ScoreboardCell, {"isEditable": false, "value": this.props.category.displayName}), this.props.players.map(createCell)));
         };
         return ScoreboardRow;
     })(React.Component);
     SevenWonders.ScoreboardRow = ScoreboardRow;
+})(SevenWonders || (SevenWonders = {}));
+var SevenWonders;
+(function (SevenWonders) {
+    var ScoreboardTotalRow = (function (_super) {
+        __extends(ScoreboardTotalRow, _super);
+        function ScoreboardTotalRow(props) {
+            _super.call(this, props);
+        }
+        ScoreboardTotalRow.prototype.render = function () {
+            var _this = this;
+            var createCell = function (player, index) {
+                // not how this should be done.
+                player.onUpdate = function () {
+                    _this.forceUpdate();
+                };
+                return React.createElement(SevenWonders.ScoreboardCell, {"isEditable": false, "value": player.scores.total().toString()});
+            };
+            return (React.createElement("tr", {"className": 'total category-row'}, React.createElement(SevenWonders.ScoreboardCell, {"isEditable": false, "value": 'Total'}), this.props.players.map(createCell)));
+        };
+        return ScoreboardTotalRow;
+    })(React.Component);
+    SevenWonders.ScoreboardTotalRow = ScoreboardTotalRow;
 })(SevenWonders || (SevenWonders = {}));
 var SevenWonders;
 (function (SevenWonders) {
@@ -113,6 +157,11 @@ var SevenWonders;
                 _this.setState({
                     isEditing: false
                 });
+                var cellValue = parseInt($(_this.refs['cellInput']).val(), 10);
+                if (!isNaN(cellValue)) {
+                    _this.props.player.scores[_this.props.category.category] = cellValue;
+                    _this.props.player.onUpdate();
+                }
             };
             this.onKeyDown = function (ev) {
                 if (ev.which === SevenWonders.Key.UpArrow) {
@@ -148,7 +197,7 @@ var SevenWonders;
                     return (React.createElement("td", null, React.createElement("input", {"ref": "cellInput", "onBlur": this.onBlur, "onKeyDown": this.onKeyDown})));
                 }
                 else {
-                    return (React.createElement("td", {"tabIndex": 0, "onFocus": this.onFocus}, this.props.value));
+                    return (React.createElement("td", {"tabIndex": 0, "onFocus": this.onFocus}, this.props.player.scores[this.props.category.category]));
                 }
             }
             else {
@@ -166,6 +215,7 @@ var SevenWonders;
 /// <reference path="./components/SevenWondersHeader" />
 /// <reference path="./components/ScoreboardContainer" />
 /// <reference path="./components/ScoreboardRow" />
+/// <reference path="./components/ScoreboardTotalRow" />
 /// <reference path="./components/ScoreboardCell" />
 var SevenWonders;
 (function (SevenWonders) {

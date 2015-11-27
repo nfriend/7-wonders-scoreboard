@@ -1,7 +1,7 @@
 module SevenWonders {
 
 	export interface ScoreboardRowProps {
-		players: Array<string>;
+		players: Array<Player>;
 		category: Category;
 		children?: any;
 	}
@@ -10,16 +10,16 @@ module SevenWonders {
 
 		constructor(props: ScoreboardRowProps) {
 			super(props);
-		}		
+		}
 
 		render() {
-			let createCell = (playerName: string, index: number) => {
-				return <ScoreboardCell isEditable={true} value={73} />
+			let createCell = (player: Player, index: number) => {
+				return <ScoreboardCell isEditable={true} player={player} category={this.props.category} />
 			};
 			
 			return (
 				<tr className={this.props.category.categoryClass + ' category-row'}>
-					<ScoreboardCell isEditable={false} value={this.props.category.name} />
+					<ScoreboardCell isEditable={false} value={this.props.category.displayName} />
 					{this.props.players.map(createCell)}
 				</tr>
 			);

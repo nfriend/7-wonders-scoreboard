@@ -5,16 +5,11 @@ module SevenWonders {
 	}
 	
 	export interface SevenWondersHeaderState {
-		currentUrl: string;
 	}
 
 	export class SevenWondersHeader extends React.Component<SevenWondersHeaderProps, SevenWondersHeaderState> {
 		constructor(props: SevenWondersHeaderProps) {
 			super(props);
-			
-			this.state = {
-				currentUrl: null
-			}
 		}
 
 		render() {
