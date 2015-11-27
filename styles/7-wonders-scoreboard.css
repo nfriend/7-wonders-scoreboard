@@ -45,3 +45,17 @@
 	border: none;
 	height: 20px;
 }
+
+.score-table th .close-button {
+	cursor: pointer;
+	visibility: hidden;
+}
+
+.score-table th:hover .close-button {
+	visibility: visible;
+	color: #bbb;
+}
+
+.score-table th:hover .close-button:hover {
+	color: #d9534f;
+}

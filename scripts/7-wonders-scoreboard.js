@@ -25,7 +25,14 @@ var SevenWonders;
     var SevenWondersContainer = (function (_super) {
         __extends(SevenWondersContainer, _super);
         function SevenWondersContainer(props) {
+            var _this = this;
             _super.call(this, props);
+            this.deletePlayer = function (player) {
+                var index = _this.state.players.indexOf(player);
+                _this.setState({
+                    players: React.addons.update(_this.state.players, { $splice: [[index, 1]] })
+                });
+            };
             var state = {
                 categories: [
                     { displayName: 'Money', categoryClass: 'money', category: 'money' },
@@ -47,7 +54,7 @@ var SevenWonders;
             this.state = state;
         }
         SevenWondersContainer.prototype.render = function () {
-            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories})));
+            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories, "deletePlayer": this.deletePlayer})));
         };
         return SevenWondersContainer;
     })(React.Component);
@@ -77,7 +84,7 @@ var SevenWonders;
         ScoreboardContainer.prototype.render = function () {
             var _this = this;
             var createPlayerHeader = function (player, index) {
-                return React.createElement("th", {"key": player.name}, player.name);
+                return (React.createElement("th", {"key": player.name}, React.createElement("span", {"className": "pull-left"}, player.name), React.createElement("span", {"className": "pull-left close-button", "onClick": function () { _this.props.deletePlayer(player); }}, "  ", React.createElement("i", {"className": "fa fa-close"}))));
             };
             var createScoreRow = function (category, index) {
                 return React.createElement(SevenWonders.ScoreboardRow, {"players": _this.props.players, "category": category});

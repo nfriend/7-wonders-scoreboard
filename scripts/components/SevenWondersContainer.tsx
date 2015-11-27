@@ -62,13 +62,21 @@ module SevenWonders {
 			
 			this.state = state;
 		}
+		
+		deletePlayer = (player: Player) => {
+			let index = this.state.players.indexOf(player);
+			
+			this.setState({
+				players: React.addons.update(this.state.players, { $splice: [[index, 1]] })
+			});
+		}
 
 		render() {
 			return (
 				<div className="container">
 					<SevenWondersHeader />
 					<hr />
-					<ScoreboardContainer players={this.state.players} categories={this.state.categories} />
+					<ScoreboardContainer players={this.state.players} categories={this.state.categories} deletePlayer={this.deletePlayer} />
 				</div>
 			);
 		}
