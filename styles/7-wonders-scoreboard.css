@@ -1,0 +1,32 @@
+.cleared {
+	float: none !important;
+	clear: both !important;
+}
+
+.category-row.money {
+	background-color: #FFFDF5;
+}
+
+.category-row.commerce {
+	background-color: #FDFFDB;
+}
+
+.category-row.science {
+	background-color: #DBFFDB;
+}
+
+.category-row.victory-points {
+	background-color: #DDDBFF;
+}
+
+.category-row.military {
+	background-color: #FFDBDB;
+}
+
+.category-row.guilds {
+	background-color: #FCDBFF;
+}
+
+.category-row.wonders {
+	background-color: #E8E8E8;
+}
