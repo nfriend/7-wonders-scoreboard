@@ -34,7 +34,7 @@ module SevenWonders {
 
 		render() {
 			let createPlayerHeader = (playerName: string, index: number) => {
-				return <th>{playerName}</th>
+				return <th key={playerName}>{playerName}</th>
 			};
 			
 			let createScoreRow = (category: Category, index: number) => {
@@ -42,7 +42,7 @@ module SevenWonders {
 			};
 			
 			return (
-				<table className="table">
+				<table className="table score-table">
 					<thead>
 						<tr>
 							<th>Category</th>

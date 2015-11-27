@@ -18,8 +18,6 @@ module SevenWonders {
 					<SevenWondersHeader />
 					<hr />
 					<ScoreboardContainer players={this.players} />
-					<br />
-					<br />
 				</div>
 			);
 		}

@@ -30,3 +30,14 @@
 .category-row.wonders {
 	background-color: #E8E8E8;
 }
+
+.score-table {
+	table-layout: fixed;
+}
+
+.score-table input {
+	background: none;
+	outline: none;
+	border: none;
+	height: 20px;
+}

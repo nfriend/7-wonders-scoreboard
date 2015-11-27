@@ -12,7 +12,7 @@ var SevenWonders;
             this.players = ['Nathan', 'Derek', 'Emily', 'Jill', 'Terry'];
         }
         SevenWondersContainer.prototype.render = function () {
-            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.players}), React.createElement("br", null), React.createElement("br", null)));
+            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.players})));
         };
         return SevenWondersContainer;
     })(React.Component);
@@ -56,12 +56,12 @@ var SevenWonders;
         ScoreboardContainer.prototype.render = function () {
             var _this = this;
             var createPlayerHeader = function (playerName, index) {
-                return React.createElement("th", null, playerName);
+                return React.createElement("th", {"key": playerName}, playerName);
             };
             var createScoreRow = function (category, index) {
                 return React.createElement(SevenWonders.ScoreboardRow, {"players": _this.props.players, "category": category});
             };
-            return (React.createElement("table", {"className": "table"}, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Category"), this.props.players.map(createPlayerHeader))), React.createElement("tbody", null, this.state.categories.map(createScoreRow))));
+            return (React.createElement("table", {"className": "table score-table"}, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Category"), this.props.players.map(createPlayerHeader))), React.createElement("tbody", null, this.state.categories.map(createScoreRow))));
         };
         return ScoreboardContainer;
     })(React.Component);
@@ -86,13 +86,74 @@ var SevenWonders;
 })(SevenWonders || (SevenWonders = {}));
 var SevenWonders;
 (function (SevenWonders) {
+    (function (Key) {
+        Key[Key["UpArrow"] = 38] = "UpArrow";
+        Key[Key["DownArrow"] = 40] = "DownArrow";
+        Key[Key["LeftArrow"] = 37] = "LeftArrow";
+        Key[Key["RightArrow"] = 39] = "RightArrow";
+        Key[Key["Enter"] = 13] = "Enter";
+        Key[Key["Escape"] = 27] = "Escape";
+    })(SevenWonders.Key || (SevenWonders.Key = {}));
+    var Key = SevenWonders.Key;
+})(SevenWonders || (SevenWonders = {}));
+/// <reference path="../Keys" />
+var SevenWonders;
+(function (SevenWonders) {
     var ScoreboardCell = (function (_super) {
         __extends(ScoreboardCell, _super);
         function ScoreboardCell(props) {
+            var _this = this;
             _super.call(this, props);
+            this.onFocus = function (ev) {
+                _this.setState({
+                    isEditing: true
+                });
+            };
+            this.onBlur = function (ev) {
+                _this.setState({
+                    isEditing: false
+                });
+            };
+            this.onKeyDown = function (ev) {
+                if (ev.which === SevenWonders.Key.UpArrow) {
+                    console.log('up arrow');
+                }
+                else if (ev.which === SevenWonders.Key.DownArrow) {
+                    console.log('down arrow');
+                }
+                else if (ev.which === SevenWonders.Key.LeftArrow) {
+                    console.log('left arrow');
+                }
+                else if (ev.which === SevenWonders.Key.RightArrow) {
+                    console.log('right arrow');
+                }
+                else if (ev.which === SevenWonders.Key.Enter) {
+                    console.log('enter');
+                }
+                else if (ev.which === SevenWonders.Key.Escape) {
+                    console.log('escape');
+                    $(ev.target).blur();
+                }
+            };
+            this.componentDidUpdate = function (prevProps, prevState) {
+                $(_this.refs["cellInput"]).focus();
+            };
+            this.state = {
+                isEditing: false
+            };
         }
         ScoreboardCell.prototype.render = function () {
-            return (React.createElement("td", null, this.props.value));
+            if (this.props.isEditable) {
+                if (this.state.isEditing) {
+                    return (React.createElement("td", null, React.createElement("input", {"ref": "cellInput", "onBlur": this.onBlur, "onKeyDown": this.onKeyDown})));
+                }
+                else {
+                    return (React.createElement("td", {"tabIndex": 0, "onFocus": this.onFocus}, this.props.value));
+                }
+            }
+            else {
+                return (React.createElement("td", null, this.props.value));
+            }
         };
         return ScoreboardCell;
     })(React.Component);
