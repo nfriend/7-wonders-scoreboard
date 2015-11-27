@@ -1,8 +1,21 @@
+var SevenWonders;
+(function (SevenWonders) {
+    (function (Key) {
+        Key[Key["UpArrow"] = 38] = "UpArrow";
+        Key[Key["DownArrow"] = 40] = "DownArrow";
+        Key[Key["LeftArrow"] = 37] = "LeftArrow";
+        Key[Key["RightArrow"] = 39] = "RightArrow";
+        Key[Key["Enter"] = 13] = "Enter";
+        Key[Key["Escape"] = 27] = "Escape";
+    })(SevenWonders.Key || (SevenWonders.Key = {}));
+    var Key = SevenWonders.Key;
+})(SevenWonders || (SevenWonders = {}));
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var update = React.addons.update;
 var SevenWonders;
 (function (SevenWonders) {
     var Score = (function () {
@@ -27,10 +40,15 @@ var SevenWonders;
         function SevenWondersContainer(props) {
             var _this = this;
             _super.call(this, props);
+            this.addPlayer = function () {
+                _this.setState({
+                    players: update(_this.state.players, { $push: [{ name: 'New player', scores: new Score() }] })
+                });
+            };
             this.deletePlayer = function (player) {
                 var index = _this.state.players.indexOf(player);
                 _this.setState({
-                    players: React.addons.update(_this.state.players, { $splice: [[index, 1]] })
+                    players: update(_this.state.players, { $splice: [[index, 1]] })
                 });
             };
             var state = {
@@ -54,7 +72,7 @@ var SevenWonders;
             this.state = state;
         }
         SevenWondersContainer.prototype.render = function () {
-            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories, "deletePlayer": this.deletePlayer})));
+            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories, "deletePlayer": this.deletePlayer}), React.createElement("button", {"onClick": this.addPlayer}, "Add Player")));
         };
         return SevenWondersContainer;
     })(React.Component);
@@ -134,18 +152,6 @@ var SevenWonders;
         return ScoreboardTotalRow;
     })(React.Component);
     SevenWonders.ScoreboardTotalRow = ScoreboardTotalRow;
-})(SevenWonders || (SevenWonders = {}));
-var SevenWonders;
-(function (SevenWonders) {
-    (function (Key) {
-        Key[Key["UpArrow"] = 38] = "UpArrow";
-        Key[Key["DownArrow"] = 40] = "DownArrow";
-        Key[Key["LeftArrow"] = 37] = "LeftArrow";
-        Key[Key["RightArrow"] = 39] = "RightArrow";
-        Key[Key["Enter"] = 13] = "Enter";
-        Key[Key["Escape"] = 27] = "Escape";
-    })(SevenWonders.Key || (SevenWonders.Key = {}));
-    var Key = SevenWonders.Key;
 })(SevenWonders || (SevenWonders = {}));
 /// <reference path="../Keys" />
 var SevenWonders;

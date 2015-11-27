@@ -1,3 +1,5 @@
+import update = React.addons.update;
+
 module SevenWonders {
 
 	export interface SevenWondersContainerProps {
@@ -63,11 +65,17 @@ module SevenWonders {
 			this.state = state;
 		}
 		
+		addPlayer = () => {
+			this.setState({
+				players: update(this.state.players, { $push: [{ name: 'New player', scores: new Score() }] })
+			})
+		}
+		
 		deletePlayer = (player: Player) => {
 			let index = this.state.players.indexOf(player);
 			
 			this.setState({
-				players: React.addons.update(this.state.players, { $splice: [[index, 1]] })
+				players: update(this.state.players, { $splice: [[index, 1]] })
 			});
 		}
 
@@ -77,6 +85,7 @@ module SevenWonders {
 					<SevenWondersHeader />
 					<hr />
 					<ScoreboardContainer players={this.state.players} categories={this.state.categories} deletePlayer={this.deletePlayer} />
+					<button onClick={this.addPlayer}>Add Player</button>
 				</div>
 			);
 		}
