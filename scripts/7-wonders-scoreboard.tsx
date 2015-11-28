@@ -1,6 +1,7 @@
 /// <reference path="../typings/react/react" />
 /// <reference path="../typings/react-dom/react-dom" />
 /// <reference path="../typings/jquery/jquery" />
+/// <reference path="../typings/js-cookie/js-cookie" />
 /// <reference path="./components/SevenWondersContainer" />
 /// <reference path="./components/SevenWondersHeader" />
 /// <reference path="./components/ScoreboardContainer" />

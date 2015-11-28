@@ -18,6 +18,17 @@ var __extends = (this && this.__extends) || function (d, b) {
 var update = React.addons.update;
 var SevenWonders;
 (function (SevenWonders) {
+    var Player = (function () {
+        function Player(name, scores) {
+            this.onUpdate = function () { };
+            this.id = Player.idCounter++;
+            this.scores = scores;
+            this.name = name;
+        }
+        Player.idCounter = 0;
+        return Player;
+    })();
+    SevenWonders.Player = Player;
     var Score = (function () {
         function Score() {
             var _this = this;
@@ -40,16 +51,24 @@ var SevenWonders;
         function SevenWondersContainer(props) {
             var _this = this;
             _super.call(this, props);
+            this.playersCookie = 'seven-wonders-players';
             this.addPlayer = function () {
+                var newPlayers = update(_this.state.players, { $push: [new Player('New Player', new Score())] });
                 _this.setState({
-                    players: update(_this.state.players, { $push: [{ name: 'New player', scores: new Score() }] })
+                    players: newPlayers
                 });
+                _this.updatePlayersCookie(newPlayers);
             };
             this.deletePlayer = function (player) {
                 var index = _this.state.players.indexOf(player);
+                var newPlayers = update(_this.state.players, { $splice: [[index, 1]] });
                 _this.setState({
-                    players: update(_this.state.players, { $splice: [[index, 1]] })
+                    players: newPlayers
                 });
+                _this.updatePlayersCookie(newPlayers);
+            };
+            this.updatePlayersCookie = function (players) {
+                Cookies.set(_this.playersCookie, players.map(function (p) { return p.name; }), { expires: 365, path: '/' });
             };
             var state = {
                 categories: [
@@ -63,7 +82,10 @@ var SevenWonders;
                 ],
                 players: []
             };
-            ['Nathan', 'Emily', 'Derek', 'Jill', 'Terry'].forEach(function (name) {
+            var playersFromCookie = Cookies.get(this.playersCookie);
+            var players = playersFromCookie ? JSON.parse(playersFromCookie) : ['Player 1', 'Player 2', 'Player 3'];
+            console.log(players);
+            players.forEach(function (name) {
                 state.players.push({
                     name: name,
                     scores: new Score()
@@ -72,7 +94,7 @@ var SevenWonders;
             this.state = state;
         }
         SevenWondersContainer.prototype.render = function () {
-            return (React.createElement("div", {"className": "container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories, "deletePlayer": this.deletePlayer}), React.createElement("button", {"onClick": this.addPlayer}, "Add Player")));
+            return (React.createElement("div", {"className": "container main-container"}, React.createElement(SevenWonders.SevenWondersHeader, null), React.createElement("hr", null), React.createElement(SevenWonders.ScoreboardContainer, {"players": this.state.players, "categories": this.state.categories, "deletePlayer": this.deletePlayer}), React.createElement("i", {"className": "fa fa-plus", "id": "add-player-button", "onClick": this.addPlayer, "title": "Add Player"})));
         };
         return SevenWondersContainer;
     })(React.Component);
@@ -102,7 +124,7 @@ var SevenWonders;
         ScoreboardContainer.prototype.render = function () {
             var _this = this;
             var createPlayerHeader = function (player, index) {
-                return (React.createElement("th", {"key": player.name}, React.createElement("span", {"className": "pull-left"}, player.name), React.createElement("span", {"className": "pull-left close-button", "onClick": function () { _this.props.deletePlayer(player); }}, "  ", React.createElement("i", {"className": "fa fa-close"}))));
+                return (React.createElement("th", {"key": player.id}, React.createElement("span", {"className": "pull-left"}, player.name), React.createElement("span", {"className": "pull-left close-button", "onClick": function () { _this.props.deletePlayer(player); }}, "  ", React.createElement("i", {"title": 'Delete ' + player.name, "className": "fa fa-close"}))));
             };
             var createScoreRow = function (category, index) {
                 return React.createElement(SevenWonders.ScoreboardRow, {"players": _this.props.players, "category": category});
@@ -194,6 +216,7 @@ var SevenWonders;
                 }
                 else if (ev.which === SevenWonders.Key.Escape) {
                     console.log('escape');
+                    $(_this.refs["cellInput"]).val(_this.props.value);
                     $(ev.target).blur();
                 }
             };
@@ -224,6 +247,7 @@ var SevenWonders;
 /// <reference path="../typings/react/react" />
 /// <reference path="../typings/react-dom/react-dom" />
 /// <reference path="../typings/jquery/jquery" />
+/// <reference path="../typings/js-cookie/js-cookie" />
 /// <reference path="./components/SevenWondersContainer" />
 /// <reference path="./components/SevenWondersHeader" />
 /// <reference path="./components/ScoreboardContainer" />

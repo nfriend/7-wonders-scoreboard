@@ -37,6 +37,7 @@
 
 .score-table {
 	table-layout: fixed;
+	float: left;
 }
 
 .score-table input {
@@ -58,4 +59,26 @@
 
 .score-table th:hover .close-button:hover {
 	color: #d9534f;
+}
+
+#add-player-button {
+	position: absolute;
+	right: 10px;
+	color: #bbb;
+	cursor: pointer;
+	margin-top: 12px;
+	margin-right: -10px;
+}
+
+#add-player-button:hover {
+	color: #5cb85c;
+}
+
+#react-container {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.main-container {
+	position: relative;
 }

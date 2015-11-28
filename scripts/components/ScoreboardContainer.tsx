@@ -16,10 +16,10 @@ module SevenWonders {
 		render() {
 			let createPlayerHeader = (player: Player, index: number) => {
 				return (
-					<th key={player.name}>
+					<th key={player.id}>
 						<span className="pull-left">{player.name}</span>
 						<span className="pull-left close-button" onClick={ () => { this.props.deletePlayer(player); } }>
-							&nbsp;&nbsp;<i className="fa fa-close"></i>
+							&nbsp;&nbsp;<i title={'Delete ' + player.name} className="fa fa-close"></i>
 						</span>
 					</th>
 				);

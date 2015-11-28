@@ -55,6 +55,7 @@ module SevenWonders {
 				console.log('enter');
 			} else if (ev.which === Key.Escape) {
 				console.log('escape');
+				$(this.refs["cellInput"]).val(this.props.value);
 				$(ev.target).blur();
 			}
 		}
